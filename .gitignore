@@ -1,2 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 venv/
-
+models/
+*.pth
+*.pt
+logs/
+*.log
+data/
+*.csv
+*.json
+.env
+notebooks/.ipynb_checkpoints/
+*.dockerfile
