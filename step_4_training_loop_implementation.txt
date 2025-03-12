@@ -1,0 +1,45 @@
+In a Multi-Task Learning (MTL) framework, the training loop is designed to 
+optimize multiple objectives simultaneously. This requires carefully structuring 
+the data, computing task-specific losses, and ensuring balanced learning across 
+tasks. The implementation of the training loop follows standard deep learning 
+practices but introduces additional considerations to accommodate the multi-task 
+nature of the model.
+
+The training loop assumes the availability of hypothetical data containing labeled 
+sentences, where each sentence is associated with two tasks: sentence classification 
+and sentiment analysis. The data is preprocessed by tokenizing sentences into input 
+tensors and mapping corresponding labels to their respective task heads. Each training 
+batch contains a set of sentences with labels for both tasks, ensuring that both 
+classification heads receive meaningful updates during backpropagation.
+
+During the forward pass, tokenized input data is passed through the shared BERT 
+backbone, producing a contextualized representation of the input. This representation 
+is then fed into two separate classification heads, each corresponding to a distinct task. 
+The outputs from these heads are logits representing class probabilities for sentence 
+classification and sentiment analysis.
+
+The loss function for each task is computed using cross-entropy loss, which is appropriate 
+for multi-class classification problems. Since the model simultaneously performs two tasks, 
+the total loss is obtained by summing the individual task losses. This approach ensures 
+that both tasks contribute equally to training unless task weighting techniques are 
+introduced to prioritize one task over another. The optimizer then performs a backward pass 
+to update the model’s parameters, adjusting both the shared BERT backbone (if not frozen) 
+and task-specific classification heads.
+
+Metrics for evaluating the model’s performance are chosen based on standard classification 
+benchmarks. Accuracy is used to measure the percentage of correct predictions for each task, 
+while additional metrics such as F1-score can provide deeper insight into performance across 
+imbalanced datasets. After each training epoch, these metrics are logged to track the model’s 
+improvement over time.
+
+Throughout the training process, the learning rate and batch size are key hyperparameters that 
+influence convergence. A lower learning rate is typically used to fine-tune pre-trained models, 
+preventing drastic weight updates that could erase previously learned representations. 
+Additionally, techniques such as gradient clipping may be implemented to stabilize training 
+when dealing with large gradients.
+
+In conclusion, training a Multi-Task Learning model requires handling multiple objectives while 
+maintaining efficient learning dynamics. The training loop ensures that both task-specific 
+classification heads receive adequate updates while leveraging shared knowledge from the 
+transformer backbone. Proper loss computation, optimization strategies, and metric tracking 
+enable balanced learning, ultimately improving performance across both tasks.
