@@ -18,7 +18,7 @@ labels_taskB = torch.tensor(train_labels_taskB)
 
 model = MultiTaskBERT()
 optimizer = optim.Adam(model.parameters(), lr=5e-5)
-criterion = nn.CrossEntropyLoss()
+criterion = nn.CrossEntropyLoss() # use the loss function for classification
 
 # training loop
 epochs = 3
