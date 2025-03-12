@@ -1,21 +1,23 @@
+# Use a lightweight Python image
 FROM python:3.10-slim
 
+# Set working directory
 WORKDIR /app
 
+# Copy dependencies and install
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install --no-cache-dir --timeout=60 --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt
-
+# Copy all source code and models
 COPY src/ src/
 COPY models/ models/
 
-# Set environment variable to prevent Python from writing .pyc files
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Copy the entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-# Expose a port (if we later add a FastAPI/Flask API)
+# Expose FastAPI port (if needed later)
 EXPOSE 8000
 
-# Default command to run inference
-CMD ["python", "src/inference.py"]
+# Set the entrypoint script as the default command
+ENTRYPOINT ["/app/entrypoint.sh"]
